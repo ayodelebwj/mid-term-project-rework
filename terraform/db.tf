@@ -10,7 +10,7 @@ resource "aws_db_subnet_group" "postgres" {
 resource "aws_db_instance" "postgres" {
   identifier             = "backend-postgres"
   engine                 = "postgres"
-  engine_version         = "15.5"
+  engine_version         = null
   instance_class         = "db.t3.micro"
   allocated_storage      = 20
   storage_type           = "gp2"
