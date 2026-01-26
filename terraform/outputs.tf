@@ -22,3 +22,7 @@ output "db_password" {
 output "db-name" {
     value = var.db-name
 }
+
+output "backend_instance_id" {
+  value = aws_instance.backend.id
+}

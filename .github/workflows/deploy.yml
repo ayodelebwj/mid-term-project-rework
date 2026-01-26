@@ -45,7 +45,7 @@ jobs:
       # ----------------------------
       - name: Terraform Apply
         working-directory: terraform
-        run: terraform destroy -auto-approve
+        run: terraform apply -auto-approve
 
       # ----------------------------
       # Export Terraform Outputs
@@ -84,10 +84,12 @@ jobs:
       # ----------------------------
       # Install Ansible
       # ----------------------------
-      - name: Install Ansible
+      - name: Install Ansible & deps
         run: |
           sudo apt update
           sudo apt install -y ansible
+          pip install ansible boto3 botocore awscli
+          ansible-galaxy collection install amazon.aws
 
       # ----------------------------
       # Run Ansible Playbook
