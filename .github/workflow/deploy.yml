@@ -1,0 +1,104 @@
+
+name: Terraform and Ansible Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ----------------------------
+      # Checkout repo
+      # ----------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ----------------------------
+      # Setup Terraform
+      # ----------------------------
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+
+      - name: configure awc credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      # ----------------------------
+      # Terraform Init
+      # ----------------------------
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init
+
+      # ----------------------------
+      # Terraform Apply
+      # ----------------------------
+      - name: Terraform Apply
+        working-directory: terraform
+        run: terraform apply -auto-approve
+
+      # ----------------------------
+      # Export Terraform Outputs
+      # ----------------------------
+      - name: Export Terraform outputs
+        working-directory: terraform
+        run: |
+          echo "FRONTEND_IP=$(terraform output -raw frontend_ip)" >> $GITHUB_ENV
+          echo "BACKEND_IP=$(terraform output -raw backend_ip)" >> $GITHUB_ENV
+          echo "DB_HOST=$(terraform output -raw db_endpoint)" >> $GITHUB_ENV
+          echo "DB_USER=$(terraform output -raw db_username)" >> $GITHUB_ENV
+          echo "DB_PASSWORD=$(terraform output -raw db_password)" >> $GITHUB_ENV
+          echo "DB_NAME=$(terraform output -raw db-name)" >> $GITHUB_ENV
+
+      # ----------------------------
+      # Create SSH key for Ansible
+      # ----------------------------
+      - name: Setup SSH key
+        run: |
+          echo "${{ secrets.AWS_SSH_KEY }}" > /tmp/key.pem
+          chmod 600 /tmp/key.pem
+
+      # ----------------------------
+      # Generate Ansible inventory (✅ your block)
+      # ----------------------------
+      - name: Generate Ansible inventory
+        run: |
+          cat <<EOF > inventory.ini
+          [frontend]
+          $FRONTEND_IP
+
+          [backend]
+          $BACKEND_IP
+          EOF
+
+      # ----------------------------
+      # Install Ansible
+      # ----------------------------
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      # ----------------------------
+      # Run Ansible Playbook
+      # ----------------------------
+      - name: Run Ansible
+        env:
+          DB_USER: ${{ env.DB_USER }}
+          DB_PASSWORD: ${{ env.DB_PASSWORD }}
+          DB_HOST: ${{ env.DB_HOST }}
+          DB_NAME: ${{ env.DB_NAME }}
+        run: |
+          ansible-playbook ansible/backend-playbook.yml     
+
+
