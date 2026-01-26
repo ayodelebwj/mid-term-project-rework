@@ -73,7 +73,7 @@ jobs:
       # ----------------------------
       - name: Generate Ansible inventory
         run: |
-          cat <<EOF > inventory.ini
+          cat <<EOF > ansible/inventory.ini
           [frontend]
           $FRONTEND_IP
 
@@ -98,7 +98,8 @@ jobs:
           DB_PASSWORD: ${{ env.DB_PASSWORD }}
           DB_HOST: ${{ env.DB_HOST }}
           DB_NAME: ${{ env.DB_NAME }}
+        working-directory: ansible
         run: |
-          ansible-playbook ansible/backend-playbook.yml     
+          ansible-playbook backend-playbook.yml     
 
 
