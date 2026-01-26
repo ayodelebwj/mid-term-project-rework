@@ -100,6 +100,6 @@ jobs:
           DB_NAME: ${{ env.DB_NAME }}
         working-directory: ansible
         run: |
-          ansible-playbook backend-playbook.yml     
+          ansible-playbook backend-playbook.yml -vvvvv  
 
 
