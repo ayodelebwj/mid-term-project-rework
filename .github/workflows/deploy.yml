@@ -60,7 +60,14 @@ jobs:
           echo "DB_PASSWORD=$(terraform output -raw db_password)" >> $GITHUB_ENV
           echo "DB_NAME=$(terraform output -raw db-name)" >> $GITHUB_ENV
           echo "BACKEND_INSTANCE_ID=$(terraform output -raw backend_instance_id)" >> $GITHUB_ENV
-
+    
+      # ----------------------------
+      # INstall Python and Pip
+      # ----------------------------
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       # ----------------------------
       # Create SSH key for Ansible
