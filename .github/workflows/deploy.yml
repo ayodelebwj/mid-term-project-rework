@@ -45,7 +45,7 @@ jobs:
       # ----------------------------
       - name: Terraform Apply
         working-directory: terraform
-        run: terraform apply -auto-approve
+        run: terraform destroy -auto-approve
 
       # ----------------------------
       # Export Terraform Outputs
@@ -66,7 +66,7 @@ jobs:
 
 
       # ----------------------------
-      # INstall Python and Pip
+      # Install Python 
       # ----------------------------
       - name: Set up Python
         uses: actions/setup-python@v5
