@@ -86,7 +86,7 @@ jobs:
       # ----------------------------
       - name: Generate Ansible inventory
         run: |
-          cat <<EOF > ../ansible/inventory.aws_ec2.yml
+          cat <<EOF > ansible/inventory.ini
           [frontend]
           $FRONTEND_IP
 
@@ -116,6 +116,6 @@ jobs:
           DB_NAME: ${{ env.DB_NAME }}
         working-directory: ansible
         run: |
-          ansible-playbook -i inventory.aws_ec2.yml backend-playbook.yml -vvvvv  
+          ansible-playbook -i inventory.ini backend-playbook.yml -vvvvv  
 
 
