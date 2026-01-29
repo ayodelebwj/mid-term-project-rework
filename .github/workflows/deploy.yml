@@ -86,7 +86,7 @@ jobs:
       # ----------------------------
       - name: Generate Ansible inventory
         run: |
-          cat <<EOF > ../ansible/inventory.ini
+          cat <<EOF > ansible/inventory.ini
           [frontend]
           $FRONTEND_IP
 
@@ -99,6 +99,7 @@ jobs:
       # ----------------------------
       - name: Install Ansible & deps
         run: |
+          cat ansible/inventory.ini
           sudo apt update
           sudo apt install -y ansible
           python -m pip install --upgrade pip
