@@ -100,6 +100,7 @@ jobs:
       - name: Install Ansible & deps
         run: |
           cat ansible/inventory.ini
+          cat ansible/aha
           sudo apt update
           sudo apt install -y ansible
           python -m pip install --upgrade pip
