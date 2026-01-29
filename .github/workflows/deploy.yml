@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # -----------------------------
+      # ----------------------------------
       # Checkout repo
-      # ----------------------------
+      # ---------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -116,6 +116,6 @@ jobs:
           DB_NAME: ${{ env.DB_NAME }}
         working-directory: ansible
         run: |
-          ansible-playbook backend-playbook.yml -vvvvv  
+          ansible-playbook -i inventory.aws_ec2.yml backend-playbook.yml -vvvvv  
 
 
