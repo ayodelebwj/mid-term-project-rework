@@ -19,10 +19,13 @@ output "db_password" {
   sensitive = true
 }
 
-output "db-name" {
+output "db_name" {
     value = var.db-name
 }
 
 output "backend_instance_id" {
   value = aws_instance.backend.id
 }
+
+
+
