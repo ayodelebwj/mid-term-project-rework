@@ -91,7 +91,7 @@ jobs:
           $FRONTEND_IP
 
           [backend]
-          ${BACKEND_INSTANCE_ID} ansible_connection=aws_ssm
+          ${BACKEND_INSTANCE_ID} 
           EOF
 
       # ----------------------------
