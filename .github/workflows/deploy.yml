@@ -111,8 +111,8 @@ jobs:
       - name: Terraform Apply
         working-directory: ansible
         run: 
-          cat ansible/aha
-          cat ansible/ansible.cfg
+          cat aha
+          cat ansible.cfg
 
       # ----------------------------
       # Run Ansible Playbook
