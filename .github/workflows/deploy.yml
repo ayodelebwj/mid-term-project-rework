@@ -116,6 +116,6 @@ jobs:
           DB_NAME: ${{ env.DB_NAME }}
         working-directory: ansible
         run: |
-          ansible-playbook -i inventory.ini backend-playbook.yml -vvvvv  
+          ansible-playbook -i inventory.ini backend-playbook.yml -vvvvvvvvvv  
 
 
