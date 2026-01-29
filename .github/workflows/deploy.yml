@@ -82,11 +82,11 @@ jobs:
           chmod 600 /tmp/key.pem
 
       # ----------------------------
-      # Generate Ansible inventory (✅ your block)
+      # Generate Ansible inventory 
       # ----------------------------
       - name: Generate Ansible inventory
         run: |
-          cat <<EOF > ansible/inventory.ini
+          cat <<EOF > ../ansible/inventory.ini
           [frontend]
           $FRONTEND_IP
 
