@@ -133,4 +133,10 @@ resource "aws_route_table_association" "private_assoc" {
 //[connection]
 //pipelining = True
 //ansible_aws_ssm_region = us-east-2
+//private_key_file = /tmp/key.pem
+
+//[aws_ssm]
+//pipelining = True
+//host_key_checking = False
+
 

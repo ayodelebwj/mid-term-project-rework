@@ -58,7 +58,7 @@ jobs:
           echo "DB_USER=$(terraform output -raw db_username)" >> $GITHUB_ENV
           echo "DB_PASSWORD=$(terraform output -raw db_password)" >> $GITHUB_ENV
           echo "DB_NAME=$(terraform output -raw db_name)" >> $GITHUB_ENV
-          echo "BACKEND_INSTANCE_ID=$(terraform output -raw backend_instance_id)" >> $GITHUB_ENV
+          BACKEND_INSTANCE_ID=$(terraform output -raw backend_instance_id)
           
           cat <<EOF > ../ansible/inventory.ini
           [frontend]
