@@ -63,7 +63,7 @@ jobs:
           AWS_REGION=us-east-2
           AWS_DEFAULT_REGION=us-east-2
           
-          cat <<EOF > ansible/inventory.ini
+          cat <<EOF > ../ansible/inventory.ini
           [frontend]
           $FRONTEND_IP
 
