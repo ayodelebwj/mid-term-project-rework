@@ -30,7 +30,6 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          role-to-assume: $(terraform output -raw github_actions_role_arn)
           aws-region: us-east-2
 
       # ----------------------------
@@ -99,6 +98,13 @@ jobs:
         working-directory: ansible
         run:
           cat inventory.ini
+
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: $(terraform output -raw github_actions_role_arn)
+          aws-region: us-east-2
 
 
       # ----------------------------
