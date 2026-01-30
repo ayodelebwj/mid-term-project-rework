@@ -52,14 +52,13 @@ jobs:
       - name: Export Terraform outputs
         working-directory: terraform
         run: |
-          FRONTEND_IP=$(terraform output -raw frontend_ip)
-          BACKEND_IP=$(terraform output -raw backend_ip)
-          DB_HOST=$(terraform output -raw db_endpoint)
-          DB_USER=$(terraform output -raw db_username)
-          DB_PASSWORD=$(terraform output -raw db_password)
-          DB_NAME=$(terraform output -raw db_name)
-          BACKEND_INSTANCE_ID=$(terraform output -raw backend_instance_id)
-
+          echo "FRONTEND_IP=$(terraform output -raw frontend_ip)" >> $GITHUB_ENV
+          echo "BACKEND_IP=$(terraform output -raw backend_ip)" >> $GITHUB_ENV
+          echo "DB_HOST=$(terraform output -raw db_endpoint)" >> $GITHUB_ENV
+          echo "DB_USER=$(terraform output -raw db_username)" >> $GITHUB_ENV
+          echo "DB_PASSWORD=$(terraform output -raw db_password)" >> $GITHUB_ENV
+          echo "DB_NAME=$(terraform output -raw db_name)" >> $GITHUB_ENV
+          echo "BACKEND_INSTANCE_ID=$(terraform output -raw backend_instance_id)" >> $GITHUB_ENV
           
           cat <<EOF > ../ansible/inventory.ini
           [frontend]
@@ -90,19 +89,9 @@ jobs:
       # ----------------------------
       - name: Install Ansible & deps
         run: |
-          sudo apt update
-          sudo apt install -y ansible
-          python -m pip install --upgrade pip
-          pip install ansible boto3 botocore awscli
+          python -m pip install --upgrade pip setuptools
+          pip install --upgrade ansible boto3 botocore awscli
           ansible-galaxy collection install amazon.aws
-
-      # ----------------------------
-      # Terraform Apply
-      # ----------------------------
-      - name: Print Inventory.ini
-        working-directory: ansible
-        run: 
-          cat inventory.ini
 
       # ----------------------------
       # Run Ansible Playbook
@@ -113,6 +102,8 @@ jobs:
           DB_PASSWORD: ${{ env.DB_PASSWORD }}
           DB_HOST: ${{ env.DB_HOST }}
           DB_NAME: ${{ env.DB_NAME }}
+          AWS_REGION: us-east-2
+          AWS_DEFAULT_REGION: us-east-2
         working-directory: ansible
         run: |
               ansible-playbook -i inventory.ini backend-playbook.yml -vvvvv

@@ -134,5 +134,3 @@ resource "aws_route_table_association" "private_assoc" {
 //pipelining = True
 //ansible_aws_ssm_region = us-east-2
 
-//AWS_REGION=us-east-2
-//AWS_DEFAULT_REGION=us-east-2
