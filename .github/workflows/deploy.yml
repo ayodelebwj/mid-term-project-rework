@@ -111,8 +111,7 @@ jobs:
       - name: Terraform Apply
         working-directory: ansible
         run: 
-          cat aha
-          cat ansible.cfg
+          cat inventory.ini
 
       # ----------------------------
       # Run Ansible Playbook
