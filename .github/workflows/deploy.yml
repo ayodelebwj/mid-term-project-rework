@@ -65,7 +65,7 @@ jobs:
           $FRONTEND_IP
 
           [backend]
-          ${BACKEND_INSTANCE_ID} ansible_connection=aws_ssm ansible_region=us-east-2
+          ${BACKEND_INSTANCE_ID} ansible_connection=amazon.aws.aws_ssm ansible_region=us-east-2
           EOF
 
       # ----------------------------
@@ -91,7 +91,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools
           pip3 install --upgrade ansible boto3 botocore awscli
-          ansible-galaxy collection install amazon.aws
+          ansible-galaxy collection install amazon.aws community.aws
           aws sts get-caller-identity
 
       - name: CAT INVENTORY FILE
@@ -113,6 +113,6 @@ jobs:
           AWS_DEFAULT_REGION: us-east-2
         working-directory: ansible
         run: |
-              ansible-playbook -i inventory.ini -m ping
+              ansible-playbook -i inventory.ini backend-playbook.yml -vvvvv
             
 
