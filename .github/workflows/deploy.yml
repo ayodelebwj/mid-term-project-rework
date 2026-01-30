@@ -90,8 +90,9 @@ jobs:
       - name: Install Ansible & deps
         run: |
           python -m pip install --upgrade pip setuptools
-          pip install --upgrade ansible boto3 botocore awscli
+          pip3 install --upgrade ansible boto3 botocore awscli
           ansible-galaxy collection install amazon.aws
+          aws sts get-caller-identity
 
       # ----------------------------
       # Run Ansible Playbook
