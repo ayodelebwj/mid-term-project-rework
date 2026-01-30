@@ -58,7 +58,7 @@ jobs:
           role-to-assume: ${{ steps.tfout.outputs.role_arn }}
           aws-region: us-east-2
 
-      # ----------------------------
+      # -------------------------------
       # Export Terraform Outputs
       # ----------------------------
       - name: Export Terraform outputs
