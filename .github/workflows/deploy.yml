@@ -25,8 +25,7 @@ jobs:
         with:
           terraform_version: 1.6.6
 
-
-      - name: configure awc credentials
+      - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -68,10 +67,8 @@ jobs:
           $FRONTEND_IP
 
           [backend]
-          ${BACKEND_INSTANCE_ID} 
+          ${BACKEND_INSTANCE_ID} ansible_connection=aws_ssm ansible_region=us-east-2
           EOF
-
-
 
       # ----------------------------
       # Install Python 
@@ -119,6 +116,6 @@ jobs:
           DB_NAME: ${{ env.DB_NAME }}
         working-directory: ansible
         run: |
-          ansible-playbook -i inventory.ini backend-playbook.yml -vvvvvvvvvv  
-
+              ansible-playbook -i inventory.ini backend-playbook.yml -vvvvv
+            
 

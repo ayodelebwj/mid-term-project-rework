@@ -25,11 +25,10 @@ resource "aws_instance" "backend" {
 
   user_data = <<-EOF
               #!/bin/bash
-              apt-get update -y
-              apt-get install -y snapd
-              snap install amazon-ssm-agent --classic
-              systemctl enable snap.amazon-ssm-agent.amazon-ssm-agent
-              systemctl start snap.amazon-ssm-agent.amazon-ssm-agent
+              sudo apt update -y && sudo apt upgrade -y
+              sudo snap install amazon-ssm-agent --classic
+              sudo systemctl enable snap.amazon-ssm-agent.amazon-ssm-agent
+              sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent
               EOF
 
   tags = {
