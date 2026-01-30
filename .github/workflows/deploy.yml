@@ -46,6 +46,18 @@ jobs:
         working-directory: terraform
         run: terraform apply -auto-approve
 
+      - name: Read role ARN from Terraform
+        id: tfout
+        run: |
+          ROLE_ARN=$(terraform output -raw github_actions_role_arn)
+          echo "role_arn=$ROLE_ARN" >> $GITHUB_OUTPUT
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ steps.tfout.outputs.role_arn }}
+          aws-region: us-east-2
+
       # ----------------------------
       # Export Terraform Outputs
       # ----------------------------
@@ -59,7 +71,7 @@ jobs:
           echo "DB_PASSWORD=$(terraform output -raw db_password)" >> $GITHUB_ENV
           echo "DB_NAME=$(terraform output -raw db_name)" >> $GITHUB_ENV
           BACKEND_INSTANCE_ID=$(terraform output -raw backend_instance_id)
-          
+
           cat <<EOF > ../ansible/inventory.ini
           [frontend]
           $FRONTEND_IP

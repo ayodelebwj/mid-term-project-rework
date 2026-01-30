@@ -27,5 +27,10 @@ output "backend_instance_id" {
   value = aws_instance.backend.id
 }
 
+output "github_actions_role_arn" {
+  value       = aws_iam_role.github_actions_ssm.arn
+}
+
+
 
 
