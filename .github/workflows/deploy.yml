@@ -65,7 +65,7 @@ jobs:
           $FRONTEND_IP
 
           [backend]
-          ${BACKEND_INSTANCE_ID} ansible_connection=amazon.aws.aws_ssm ansible_region=us-east-2
+          ${BACKEND_INSTANCE_ID} ansible_connection=aws_ssm ansible_region=us-east-2
           EOF
 
       # ----------------------------

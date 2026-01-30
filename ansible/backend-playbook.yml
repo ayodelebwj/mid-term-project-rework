@@ -1,4 +1,6 @@
 - hosts: backend
+  connection: amazon.aws.aws_ssm
+  gather_facts: false
   become: true
 
   vars:
