@@ -125,3 +125,14 @@ resource "aws_route_table_association" "private_assoc" {
   subnet_id      = aws_subnet.private.id
   route_table_id = aws_route_table.private.id
 }
+
+
+//ansible_connection = aws_ssm
+
+
+//[connection]
+//pipelining = True
+//ansible_aws_ssm_region = us-east-2
+
+//AWS_REGION=us-east-2
+//AWS_DEFAULT_REGION=us-east-2

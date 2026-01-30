@@ -59,8 +59,7 @@ jobs:
           DB_PASSWORD=$(terraform output -raw db_password)
           DB_NAME=$(terraform output -raw db_name)
           BACKEND_INSTANCE_ID=$(terraform output -raw backend_instance_id)
-          AWS_REGION=us-east-2
-          AWS_DEFAULT_REGION=us-east-2
+
           
           cat <<EOF > ../ansible/inventory.ini
           [frontend]
