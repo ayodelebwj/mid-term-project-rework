@@ -113,6 +113,6 @@ jobs:
           AWS_DEFAULT_REGION: us-east-2
         working-directory: ansible
         run: |
-              ansible-playbook -i inventory.ini backend-playbook.yml -vvvvv
+              ansible-playbook -i inventory.ini -m ping
             
 
