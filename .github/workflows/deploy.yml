@@ -94,6 +94,12 @@ jobs:
           ansible-galaxy collection install amazon.aws
           aws sts get-caller-identity
 
+      - name: CAT INVENTORY FILE
+        working-directory: ansible
+        run:
+          cat inventory.ini
+
+
       # ----------------------------
       # Run Ansible Playbook
       # ----------------------------
