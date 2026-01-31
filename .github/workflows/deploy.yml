@@ -99,13 +99,15 @@ jobs:
         run:
           cat inventory.ini
 
+      - name: configure aws credentials
+        run: 
+            GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)
 
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: $(terraform output -raw github_actions_role_arn)
+          role-to-assume: ${GIT_ROLE_ARN}
           aws-region: us-east-2
-
 
       # ----------------------------
       # Run Ansible Playbook
