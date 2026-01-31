@@ -55,11 +55,11 @@ jobs:
           role-to-assume: ${{ env.GIT_ROLE_ARN }}
           aws-region: us-east-2
 
-
       - name: Install Ansible and AWS dependencies
         run: |
           python3 -m pip install --upgrade pip
           pip install boto3 botocore ansible amazon.aws
+          ansible-galaxy collection install amazon.aws
 
       - name: Run Ansible Playbook
         run: |
