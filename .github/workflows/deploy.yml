@@ -10,6 +10,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       # ----------------------------------
       # Checkout repo
@@ -99,11 +103,11 @@ jobs:
         run:
           cat inventory.ini
 
-      - name: configure aws credentials
+      - name: get git role credentials
         run: 
             GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)
 
-      - name: configure aws credentials
+      - name: attach git role credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${GIT_ROLE_ARN}
