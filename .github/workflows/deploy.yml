@@ -65,6 +65,6 @@ jobs:
       - name: Run Ansible Playbook
         working-directory: ansible
         run: |
-          ansible-playbook deploy-backend.yml \
+          ansible-playbook backend-playbook.yml \
             -i "localhost," \
             -e "target_instance_ids=i-08db51b8f89469e69 ansible_connection=amazon.aws.aws_ssm"
