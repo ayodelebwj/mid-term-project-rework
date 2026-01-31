@@ -1,12 +1,25 @@
 ---
     - name: Replace DATABASE_URL block in main.py
+      vars:
+        app_user: ubuntu
+        app_dir: /opt/fastapi-app
+        repo_url: "https://github.com/techbleat/fruits-veg_market.git"
+        backend_dir: "{{ app_dir }}/backend-api"
+        venv_dir: "{{ backend_dir }}/venv"
+        app_port: 8000
+    # 🔐 Database variables (passed from GitHub Actions)
+        db_user: "{{ lookup('env', 'DB_USER') }}"
+        db_password: "{{ lookup('env', 'DB_PASSWORD') }}"
+        db_host: "{{ lookup('env', 'DB_HOST') }}"
+        db_name: "{{ lookup('env', 'DB_NAME') }}"     
+      
       blockinfile:
         path: "{{ backend_dir }}/main.py"
         marker: "# {mark} ANSIBLE MANAGED DATABASE CONFIG"
         block: |
           import os
-          DATABASE_URL = (f"postgresql+psycopg://f"{os.getenv('DB_USER')}:f"{os.getenv('DB_PASSWORD')}@f"{os.getenv('DB_HOST')}:5432/f"{os.getenv('DB_NAME')}")
-
+          DATABASE_URL = (f"postgresql+psycopg://f"{os.getenv('DB_USER')}:f"{os.getenv('DB_PASSWORD')}@f"{os.getenv('DB_HOST')}:5432/f"{os.getenv('DB_NAME')}") 
+        
     - name: Install system dependencies
       apt:
         name:
