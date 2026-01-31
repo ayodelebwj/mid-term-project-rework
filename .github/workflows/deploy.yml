@@ -57,9 +57,10 @@ jobs:
 
       - name: Install Ansible and AWS dependencies
         run: |
-          python3 -m pip install --upgrade pip
-          pip install boto3 botocore ansible amazon.aws
-          ansible-galaxy collection install amazon.aws
+            python3 -m pip install --upgrade pip --user
+            python3 -m pip install --upgrade ansible boto3 botocore --user
+            ansible-galaxy collection install amazon.aws
+
 
       - name: Run Ansible Playbook
         run: |
