@@ -30,6 +30,8 @@ jobs:
       - name: get git role credentials
         working-directory: terraform
         run: 
+            terraform init
+            terraform apply -auto-approve
             echo "GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)" >> $GITHUB_ENV
            
       - name: attach git role credentials
