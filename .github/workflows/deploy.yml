@@ -69,4 +69,4 @@ jobs:
         working-directory: ansible
         run: |
           #ansible-playbook backend-playbook.yml -i "i-08db51b8f89469e69," -e "ansible_connection=amazon.aws.aws_ssm"
-           ansible-playbook backend-playbook.yml -i i-08db51b8f89469e69
+           ansible-playbook backend-playbook.yml -i hosts
