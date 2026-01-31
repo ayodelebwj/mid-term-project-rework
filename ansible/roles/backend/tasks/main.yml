@@ -4,7 +4,8 @@
         app_user: ubuntu
         app_dir: /opt/fastapi-app
         repo_url: "https://github.com/techbleat/fruits-veg_market.git"
-        backend_dir: "{{ app_dir }}/backend-api"
+        #backend_dir: "{{ app_dir }}/backend-api"
+        backend_dir: "fruits-veg_market/backend-api"
         venv_dir: "{{ backend_dir }}/venv"
         app_port: 8000
     # 🔐 Database variables (passed from GitHub Actions)
