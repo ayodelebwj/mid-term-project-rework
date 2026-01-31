@@ -104,6 +104,7 @@ jobs:
           cat inventory.ini
 
       - name: get git role credentials
+        working-directory: terraform
         run: 
             echo "GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)" >> $GITHUB_ENV
            
