@@ -107,11 +107,10 @@ jobs:
         run: 
             echo "GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)" >> $GITHUB_ENV
            
-
       - name: attach git role credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${GIT_ROLE_ARN}
+          role-to-assume: ${{ env.GIT_ROLE_ARN }}
           aws-region: us-east-2
 
       # ----------------------------
