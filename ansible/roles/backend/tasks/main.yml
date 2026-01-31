@@ -1,75 +1,45 @@
 ---
-    - name: Replace DATABASE_URL block in main.py
-      vars:
-        app_user: ubuntu
-        app_dir: /opt/fastapi-app
-        repo_url: "https://github.com/techbleat/fruits-veg_market.git"
-        #backend_dir: "{{ app_dir }}/backend-api"
-        backend_dir: "fruits-veg_market/backend-api"
-        venv_dir: "{{ backend_dir }}/venv"
-        app_port: 8000
-    # 🔐 Database variables (passed from GitHub Actions)
-        db_user: "{{ lookup('env', 'DB_USER') }}"
-        db_password: "{{ lookup('env', 'DB_PASSWORD') }}"
-        db_host: "{{ lookup('env', 'DB_HOST') }}"
-        db_name: "{{ lookup('env', 'DB_NAME') }}"     
-      
-      blockinfile:
-        path: "{{ backend_dir }}/main.py"
-        marker: "# {mark} ANSIBLE MANAGED DATABASE CONFIG"
-        block: |
-          import os
-          DATABASE_URL = (f"postgresql+psycopg://f"{os.getenv('DB_USER')}:f"{os.getenv('DB_PASSWORD')}@f"{os.getenv('DB_HOST')}:5432/f"{os.getenv('DB_NAME')}") 
-        
-    - name: Install system dependencies
-      apt:
-        name:
-          - python3
-          - python3-pip
-          - python3-venv
-          - git
-        update_cache: yes
-        state: present
+- name: Ensure git is installed
+  apt:
+    name: git
+    state: present
+  become: true
 
-    - name: Create application directory
-      file:
-        path: "{{ app_dir }}"
-        state: directory
-        owner: "{{ app_user }}"
-        group: "{{ app_user }}"
-        mode: "0755"
+- name: Ensure python3-pip is installed
+  apt:
+    name: python3-pip
+    state: present
+  become: true
 
-    - name: Clone Git repository
-      git:
-        repo: "{{ repo_url }}"
-        dest: "{{ app_dir }}"
-        version: main
-        force: yes
-      become_user: "{{ app_user }}"
+- name: Ensure python3-venv is installed
+  apt:
+    name: python3-venv
+    state: present
+  become: true
 
-    - name: Create Python virtual environment
-      command: python3 -m venv {{ venv_dir }}
-      args:
-        creates: "{{ venv_dir }}/bin/activate"
-      become_user: "{{ app_user }}"
+- name: Clone fruits-veg_market repo
+  git:
+    repo: 'https://github.com/techbleat/fruits-veg_market.git'
+    dest: /opt/fruits-veg_market
+    version: main
+    force: true
 
-    - name: Install Python dependencies
-      pip:
-        requirements: "{{ backend_dir }}/requirements.txt"
-        virtualenv: "{{ venv_dir }}"
-        virtualenv_python: python3
-      become_user: "{{ app_user }}"
+- name: Create Python virtual environment
+  command: python3 -m venv /opt/fruits-veg_market/backend-api/venv
+  args:
+    creates: /opt/fruits-veg_market/backend-api/venv/bin/activate
 
-    - name: Start FastAPI app with DB env vars
-      shell: |
-        export DB_USER="{{ db_user }}"
-        export DB_PASSWORD="{{ db_password }}"
-        export DB_HOST="{{ db_host }}"
-        export DB_HOST="{{ db-name }}"
-        nohup {{ venv_dir }}/bin/uvicorn main:app \
-          --host 0.0.0.0 \
-          --port {{ app_port }} \
-          > fastapi.log 2>&1 &
-      args:
-        chdir: "{{ backend_dir }}"
-      become_user: "{{ app_user }}"
+- name: Install Python requirements in virtualenv
+  pip:
+    requirements: /opt/fruits-veg_market/backend-api/requirements.txt
+    virtualenv: /opt/fruits-veg_market/backend-api/venv
+
+- name: Deploy backend with FastAPI using uvicorn
+  command: >
+    /opt/fruits-veg_market/backend-api/venv/bin/uvicorn main:app
+    --host 0.0.0.0 --port 8000 --reload
+  args:
+    chdir: /opt/fruits-veg_market/backend-api
+  async: 0
+  poll: 0
+  become: true
