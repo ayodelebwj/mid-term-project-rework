@@ -44,15 +44,17 @@ jobs:
 
 
       - name: get git role credentials
+        id: get_git_role
         working-directory: terraform
-        run: 
-            echo "GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)" >> $GITHUB_ENV
+        run: |
+            echo "GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)" >> $GITHUB_OUTPUT
              
 
       - name: attach git role credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ env.GIT_ROLE_ARN }}
+          #role-to-assume: {{ env.GIT_ROLE_ARN }}
+          role-to-assume: ${{ steps.get_git_role.outputs.role_arn }}
           aws-region: us-east-2
 
       - name: Install Ansible and AWS dependencies
