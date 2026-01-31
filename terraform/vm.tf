@@ -29,6 +29,8 @@ resource "aws_instance" "backend" {
               sudo snap install amazon-ssm-agent --classic
               sudo systemctl enable snap.amazon-ssm-agent.amazon-ssm-agent
               sudo systemctl start snap.amazon-ssm-agent.amazon-ssm-agent
+              sudo apt-get update -y &&
+              sudo apt-get install -y python3 python3-apt
               EOF
 
   tags = {
