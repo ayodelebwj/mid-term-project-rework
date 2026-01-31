@@ -61,6 +61,7 @@ jobs:
         run: |
             python3 -m pip install --upgrade pip --user
             python3 -m pip install --upgrade ansible boto3 botocore --user
+            echo "$HOME/.local/bin" >> $GITHUB_PATH
             ansible-galaxy collection install amazon.aws
 
 
@@ -68,5 +69,4 @@ jobs:
         working-directory: ansible
         run: |
           #ansible-playbook backend-playbook.yml -i "i-08db51b8f89469e69," -e "ansible_connection=amazon.aws.aws_ssm"
-           ansible-playbook backend-playbook.yml -i inventory.yml
-
+           ansible-playbook backend-playbook.yml -i i-08db51b8f89469e69
