@@ -1,6 +1,7 @@
 ---
 - name: Deploy FastAPI Backend via SSM
-  hosts: localhost
+  hosts: all
+  connection: amazon.aws.aws_ssm
   gather_facts: false
   vars:
     ansible_python_interpreter: /usr/bin/python3
