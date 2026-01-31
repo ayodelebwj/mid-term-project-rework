@@ -36,8 +36,13 @@ jobs:
         working-directory: terraform
         run: 
             terraform init
+      
+      - name: run terraform apply
+        working-directory: terraform
+        run: 
             terraform apply -auto-approve
- 
+
+
       - name: get git role credentials
         working-directory: terraform
         run: 
