@@ -60,11 +60,11 @@ jobs:
           echo "BACKEND_IP=$(terraform output -raw backend_ip)" >> $GITHUB_ENV
 
           cat <<EOF > ../ansible/inventory/hosts.ini
-          [frontend]
-          $FRONTEND_IP
+          [app]
+          ${FRONTEND_IP}
 
-          [backend]
-          $BACKEND_IP
+          [web]
+          ${BACKEND_IP}
           EOF
 
       # ----------------------------
