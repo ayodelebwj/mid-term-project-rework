@@ -91,7 +91,7 @@ jobs:
       - name: CAT INVENTORY FILE
         working-directory: ansible
         run:
-          cat hosts.ini
+          cat inventory/hosts.ini
 
       # ----------------------------
       # Run Ansible Playbook
