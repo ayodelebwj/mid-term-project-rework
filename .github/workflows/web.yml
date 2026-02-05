@@ -59,7 +59,7 @@ jobs:
           echo "FRONTEND_IP=$(terraform output -raw frontend_ip)" >> $GITHUB_ENV
           echo "BACKEND_IP=$(terraform output -raw backend_ip)" >> $GITHUB_ENV
 
-          cat <<EOF > ../ansible/inventory.ini
+          cat <<EOF > ../ansible/inventory/hosts.ini
           [frontend]
           $FRONTEND_IP
 
@@ -94,6 +94,6 @@ jobs:
       - name: Run Ansible
         working-directory: ansible
         run: |
-              ansible-playbook -i hosts.ini playbook.yml -vvvvv
+              ansible-playbook -i inventory/hosts.ini playbook.yml -vvvvv
             
 
