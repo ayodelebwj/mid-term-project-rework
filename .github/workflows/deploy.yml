@@ -1,24 +1,33 @@
-name: Deploy Backend
+
+name: Terraform and Ansible Deploy
 
 on:
   push:
     branches:
       - main
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      AWS_REGION: us-east-2
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
-      - name: Checkout code
+      # ----------------------------------
+      # Checkout repo
+      # ---------------------------------
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      # ----------------------------
+      # Setup Terraform
+      # ----------------------------
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
 
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -27,46 +36,97 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.6.6
-
-      - name: run terraform
+      # ----------------------------
+      # Terraform Init
+      # ----------------------------
+      - name: Terraform Init
         working-directory: terraform
-        run: 
-            terraform init
-      
-      - name: run terraform apply
+        run: terraform init
+
+      # ----------------------------
+      # Terraform Apply
+      # ----------------------------
+      - name: Terraform Apply
         working-directory: terraform
-        run: 
-            terraform apply -auto-approve
+        run: terraform apply -auto-approve
 
-
-      - name: get git role credentials
-        id: get_git_role
+      # -------------------------------
+      # Export Terraform Outputs
+      # ----------------------------
+      - name: Export Terraform outputs
         working-directory: terraform
         run: |
-            echo "GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)" >> $GITHUB_OUTPUT
-             
+          echo "FRONTEND_IP=$(terraform output -raw frontend_ip)" >> $GITHUB_ENV
+          echo "BACKEND_IP=$(terraform output -raw backend_ip)" >> $GITHUB_ENV
+          echo "DB_HOST=$(terraform output -raw db_endpoint)" >> $GITHUB_ENV
+          echo "DB_USER=$(terraform output -raw db_username)" >> $GITHUB_ENV
+          echo "DB_PASSWORD=$(terraform output -raw db_password)" >> $GITHUB_ENV
+          echo "DB_NAME=$(terraform output -raw db_name)" >> $GITHUB_ENV
+          BACKEND_INSTANCE_ID=$(terraform output -raw backend_instance_id)
 
+          cat <<EOF > ../ansible/inventory.ini
+          [frontend]
+          $FRONTEND_IP
+
+          [backend]
+          ${BACKEND_INSTANCE_ID} ansible_connection=aws_ssm ansible_region=us-east-2
+          EOF
+
+      # ----------------------------
+      # Install Python 
+      # ----------------------------
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # ----------------------------
+      # Create SSH key for Ansible
+      # ----------------------------
+      - name: Setup SSH key
+        run: |
+          echo "${{ secrets.AWS_SSH_KEY }}" > /tmp/key.pem
+          chmod 600 /tmp/key.pem
+
+      # ----------------------------
+      # Install Ansible
+      # ----------------------------
+      - name: Install Ansible & deps
+        run: |
+          python -m pip install --upgrade pip setuptools
+          pip3 install --upgrade ansible boto3 botocore awscli
+          ansible-galaxy collection install amazon.aws community.aws
+          aws sts get-caller-identity
+
+      - name: CAT INVENTORY FILE
+        working-directory: ansible
+        run:
+          cat inventory.ini
+
+      - name: get git role credentials
+        working-directory: terraform
+        run: 
+            echo "GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)" >> $GITHUB_ENV
+           
       - name: attach git role credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          #role-to-assume: {{ env.GIT_ROLE_ARN }}
-          role-to-assume: ${{ steps.get_git_role.outputs.role_arn }}
+          role-to-assume: ${{ env.GIT_ROLE_ARN }}
           aws-region: us-east-2
 
-      - name: Install Ansible and AWS dependencies
-        run: |
-            python3 -m pip install --upgrade pip --user
-            python3 -m pip install --upgrade ansible boto3 botocore --user
-            echo "$HOME/.local/bin" >> $GITHUB_PATH
-            ansible-galaxy collection install amazon.aws
-
-
-      - name: Run Ansible Playbook
+      # ----------------------------
+      # Run Ansible Playbook
+      # ----------------------------
+      - name: Run Ansible
+        env:
+          DB_USER: ${{ env.DB_USER }}
+          DB_PASSWORD: ${{ env.DB_PASSWORD }}
+          DB_HOST: ${{ env.DB_HOST }}
+          DB_NAME: ${{ env.DB_NAME }}
+          AWS_REGION: us-east-2
+          AWS_DEFAULT_REGION: us-east-2
         working-directory: ansible
         run: |
-          #ansible-playbook backend-playbook.yml -i "i-08db51b8f89469e69," -e "ansible_connection=amazon.aws.aws_ssm"
-           ansible-playbook backend-playbook.yml -i hosts
+              ansible-playbook -i inventory.ini backend-playbook.yml -vvvvv
+            
+

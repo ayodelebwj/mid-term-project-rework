@@ -10,10 +10,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    permissions:
-      id-token: write
-      contents: read
-
     steps:
       # ----------------------------------
       # Checkout repo
@@ -34,7 +30,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
+          aws-region: us-east-1
 
       # ----------------------------
       # Terraform Init
@@ -49,6 +45,10 @@ jobs:
       - name: Terraform Apply
         working-directory: terraform
         run: terraform apply -auto-approve
+
+      - name: Terraform Apply
+        working-directory: terraform
+        run: terraform output -json > ../ansible/tf_outputs.json
 
       # -------------------------------
       # Export Terraform Outputs
@@ -69,7 +69,7 @@ jobs:
           $FRONTEND_IP
 
           [backend]
-          ${BACKEND_INSTANCE_ID} ansible_connection=aws_ssm ansible_region=us-east-2
+          ${BACKEND_INSTANCE_ID} ansible_connection=aws_ssm ansible_region=us-east-1
           EOF
 
       # ----------------------------
@@ -88,45 +88,17 @@ jobs:
           echo "${{ secrets.AWS_SSH_KEY }}" > /tmp/key.pem
           chmod 600 /tmp/key.pem
 
-      # ----------------------------
-      # Install Ansible
-      # ----------------------------
-      - name: Install Ansible & deps
-        run: |
-          python -m pip install --upgrade pip setuptools
-          pip3 install --upgrade ansible boto3 botocore awscli
-          ansible-galaxy collection install amazon.aws community.aws
-          aws sts get-caller-identity
-
       - name: CAT INVENTORY FILE
         working-directory: ansible
         run:
-          cat inventory.ini
-
-      - name: get git role credentials
-        working-directory: terraform
-        run: 
-            echo "GIT_ROLE_ARN=$(terraform output -raw github_actions_role_arn)" >> $GITHUB_ENV
-           
-      - name: attach git role credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ env.GIT_ROLE_ARN }}
-          aws-region: us-east-2
+          cat hosts.ini
 
       # ----------------------------
       # Run Ansible Playbook
       # ----------------------------
       - name: Run Ansible
-        env:
-          DB_USER: ${{ env.DB_USER }}
-          DB_PASSWORD: ${{ env.DB_PASSWORD }}
-          DB_HOST: ${{ env.DB_HOST }}
-          DB_NAME: ${{ env.DB_NAME }}
-          AWS_REGION: us-east-2
-          AWS_DEFAULT_REGION: us-east-2
         working-directory: ansible
         run: |
-              ansible-playbook -i inventory.ini backend-playbook.yml -vvvvv
+              ansible-playbook -i hosts.ini playbook.yml -vvvvv
             
 

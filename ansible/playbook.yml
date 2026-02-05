@@ -1,0 +1,12 @@
+- hosts: web
+  gather_facts: true
+  become: true
+  roles:
+    - frontend
+
+
+#- hosts: backend
+#  roles:
+#    - frontend
+
+
