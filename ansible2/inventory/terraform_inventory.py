@@ -10,19 +10,14 @@ tf_output = subprocess.check_output(
 
 data = json.loads(tf_output)
 
-# Build hosts dict
-hosts = {
-    data["webserverip"]["value"]: {}
-}
+web_ip = data["webserverip"]["value"]
+app_ip  = data["app_private_ip"]["value"]
 
-# Build inventory
 inventory = {
-    "all": {
-        "hosts": hosts
-    },
-    "_meta": {
-        "hostvars": {}
-    }
+    "web": {"hosts": {web_ip: {}}},
+    "app":  {"hosts": {app_ip: {}}},
+    "all": {"children": ["web", "app"]},
+    "_meta": {"hostvars": {}}
 }
 
 # Print inventory to stdout
