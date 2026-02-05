@@ -89,6 +89,9 @@ jobs:
           pwd
           ls -l ansible/inventory
           cat ansible/inventory/hosts.ini
+          echo "FRONTEND_IP=$FRONTEND_IP"
+          echo "BACKEND_IP=$BACKEND_IP"
+         
 
       # ----------------------------
       # Run Ansible Playbook
