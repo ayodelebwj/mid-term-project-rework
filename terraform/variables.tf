@@ -12,6 +12,6 @@ variable "db-name" {
 }
 
 variable "key_name" {
-    default = "deledele"
+    default = "lennipsssbwj-kp"
 }
 
