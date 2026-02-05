@@ -3,7 +3,7 @@
   hosts: web
   become: yes
   vars_files:
-    - web.yml
+    - frontend.yml
 
 
   tasks:

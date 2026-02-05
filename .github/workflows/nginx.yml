@@ -84,11 +84,6 @@ jobs:
           echo "${{ secrets.AWS_SSH_KEY }}" > /tmp/key.pem
           chmod 600 /tmp/key.pem
 
-      - name: CAT INVENTORY FILE
-        working-directory: ansible
-        run:
-          cat inventory/hosts.ini
-
       - name: Debug inventory
         run: |
           pwd

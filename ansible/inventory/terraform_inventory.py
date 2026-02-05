@@ -5,7 +5,7 @@ import subprocess
 # Call terraform and get outputs
 tf_output = subprocess.check_output(
     ["terraform", "output", "-json"],
-    cwd="../terraform"
+    cwd="../terraform",
     text=True
 )
 
