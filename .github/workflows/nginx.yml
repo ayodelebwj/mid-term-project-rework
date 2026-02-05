@@ -89,6 +89,12 @@ jobs:
         run:
           cat inventory/hosts.ini
 
+      - name: Debug inventory
+        run: |
+          pwd
+          ls -l ansible/inventory
+          cat ansible/inventory/hosts.ini
+
       # ----------------------------
       # Run Ansible Playbook
       # ----------------------------
