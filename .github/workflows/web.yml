@@ -46,9 +46,9 @@ jobs:
         working-directory: terraform
         run: terraform apply -auto-approve
 
-      - name: Terraform Apply
+      - name: Terraform output to json
         working-directory: terraform
-        run: terraform output -json > ../ansible/tf_outputs.json
+        run: terraform output -json > tf_outputs.json
 
       # -------------------------------
       # Export Terraform Outputs
