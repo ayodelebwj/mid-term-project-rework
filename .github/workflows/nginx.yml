@@ -48,18 +48,19 @@ jobs:
           terraform apply -auto-approve
 
       - name: Terraform output to json
+        working-directory: terraform
         run: terraform output -json > tf_outputs.json
 
       # -------------------------------
       # Export Terraform Outputs
       # ----------------------------
       - name: Export Terraform outputs
+        working-directory: terraform
         run: |
           echo "FRONTEND_IP=$(terraform output -raw frontend_ip)" >> $GITHUB_ENV
           echo "BACKEND_IP=$(terraform output -raw backend_ip)" >> $GITHUB_ENV
 
-          mkdir -p ansible/inventory
-          cat <<EOF > ansible/inventory/hosts.ini
+          cat <<EOF > ../ansible/inventory/hosts.ini
           [app]
           $FRONTEND_IP
 
@@ -100,6 +101,6 @@ jobs:
       - name: Run Ansible
         working-directory: ansible
         run: |
-              ansible-playbook -i inventory/hosts.ini playbook.yml -vvvvv
+              ansible-playbook -i inventory/terraform_inventory.py playbook.yml -vvvvv
             
 
