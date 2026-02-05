@@ -101,6 +101,6 @@ jobs:
       - name: Run Ansible
         working-directory: ansible
         run: |
-              ansible-playbook -i inventory/terraform_inventory.py playbook.yml -vvvvv
+              ansible-playbook -i inventory/hosts.ini playbook.yml -vvvvv
             
 
