@@ -49,7 +49,7 @@ jobs:
 
       - name: Terraform output to json
         working-directory: terraform
-        run: terraform output -json > tf_outputs.json
+        run: terraform output -json > tf_output.json
 
       # -------------------------------
       # Export Terraform Outputs
