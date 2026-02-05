@@ -10,8 +10,8 @@ tf_output = subprocess.check_output(
 
 data = json.loads(tf_output)
 
-web_ip = data["webserverip"]["value"]
-app_ip  = data["app_private_ip"]["value"]
+web_ip = data["frontend_ip"]["value"]
+app_ip  = data["backend_ip"]["value"]
 
 inventory = {
     "web": {"hosts": {web_ip: {}}},
