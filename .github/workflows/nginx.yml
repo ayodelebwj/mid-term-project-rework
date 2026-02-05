@@ -46,7 +46,6 @@ jobs:
         working-directory: terraform
         run: 
           terraform apply -auto-approve
-          terraform output -json > tf_outputs.json
 
       - name: Terraform output to json
         working-directory: terraform
@@ -103,6 +102,6 @@ jobs:
       - name: Run Ansible
         working-directory: ansible
         run: |
-              ansible-playbook -i inventory/hosts.ini playbook.yml -vvvvv
+              ansible-playbook -i inventory/terraform_inventory.py playbook.yml -vvvvv
             
 
