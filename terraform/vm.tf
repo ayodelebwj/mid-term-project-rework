@@ -1,6 +1,6 @@
 # Frontend EC2 (Public)
 resource "aws_instance" "frontend" {
-  ami                         = "ami-06e3c045d79fd65d9"
+  ami                         = "ami-0b6c6ebed2801a5cb"
   instance_type               = "t2.micro"
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [aws_security_group.frontend_sg.id]
@@ -15,7 +15,7 @@ resource "aws_instance" "frontend" {
 
 # Backend EC2 (Private)
 resource "aws_instance" "backend" {
-  ami                    = "ami-06e3c045d79fd65d9"
+  ami                    = "ami-0b6c6ebed2801a5cb"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.private.id
   vpc_security_group_ids = [aws_security_group.backend_sg.id]
