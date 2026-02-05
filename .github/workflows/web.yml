@@ -58,18 +58,13 @@ jobs:
         run: |
           echo "FRONTEND_IP=$(terraform output -raw frontend_ip)" >> $GITHUB_ENV
           echo "BACKEND_IP=$(terraform output -raw backend_ip)" >> $GITHUB_ENV
-          echo "DB_HOST=$(terraform output -raw db_endpoint)" >> $GITHUB_ENV
-          echo "DB_USER=$(terraform output -raw db_username)" >> $GITHUB_ENV
-          echo "DB_PASSWORD=$(terraform output -raw db_password)" >> $GITHUB_ENV
-          echo "DB_NAME=$(terraform output -raw db_name)" >> $GITHUB_ENV
-          BACKEND_INSTANCE_ID=$(terraform output -raw backend_instance_id)
 
           cat <<EOF > ../ansible/inventory.ini
           [frontend]
           $FRONTEND_IP
 
           [backend]
-          ${BACKEND_INSTANCE_ID} ansible_connection=aws_ssm ansible_region=us-east-1
+          $BACKEND_IP
           EOF
 
       # ----------------------------
