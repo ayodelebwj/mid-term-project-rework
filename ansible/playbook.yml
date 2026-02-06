@@ -10,12 +10,12 @@
     - name: clone git repo
       git:
         repo: https://github.com/techbleat/fruits-veg_market.git
-        dest: /home/ubuntu/
+        dest: /home/ubuntu/project/
         update: yes
 
     - name: update index.html
       replace:
-        path: /home/ubuntu/fruits-veg_market/frontend/index.html
+        path: /home/ubuntu/project/frontend/index.html
         regexp: 'http://[^"]+/api/products'
         replace: '/api/products'
 
@@ -42,13 +42,13 @@
 
     - name: Backup index.nginx.html manually
       ansible.builtin.copy:
-        src: /home/ubuntu/fruits-veg_market/frontend/index.nginx.html
+        src: /home/ubuntu/project/frontend/index.nginx.html
         dest: /var/www/html/index.nginx
         remote_src: yes
 
     - name: copy index.html file
       copy:
-        src: /home/ubuntu/fruits-veg_market/frontend/index.html
+        src: /home/ubuntu/project/frontend/index.html
         dest: /var/www/html/index.html
 
     - name: restart nginx service
