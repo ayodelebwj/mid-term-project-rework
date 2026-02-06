@@ -14,8 +14,10 @@
         update: yes
 
     - name: debug
-      command: pwd && ls -la /home/ubuntu/project/frontend/
+      command: pwd 
         
+    - name: debug
+      command: ls -latr /home/ubuntu/project/frontend/
 
     - name: update index.html
       replace:
