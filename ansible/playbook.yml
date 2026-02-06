@@ -57,6 +57,7 @@
       copy:
         src: /home/ubuntu/fruits-veg_market/frontend/index.html
         dest: /var/www/html/index.html
+        remote_src: yes
 
     - name: restart nginx service
       service:
