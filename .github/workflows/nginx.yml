@@ -85,7 +85,7 @@ jobs:
       # ----------------------------
       - name: Setup SSH key
         run: |
-          echo "${{ secrets.AWS_SSH_KEY }}" > /tmp/key.pem
+          echo "${{ secrets.AWS_SSH_KEY }}" > /tmp/mykey.pem
           chmod 600 /tmp/key.pem
 
       - name: Debug inventory
