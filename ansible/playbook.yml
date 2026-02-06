@@ -8,7 +8,7 @@
 
   tasks:
     - name: clone git using command
-      command: git clone --single-branch-b mini-project https://github.com/techbleat/fruits-veg_market.git 
+      command: git clone --single-branch -b mini-project https://github.com/techbleat/fruits-veg_market.git 
 
     - name: print wd
       command: pwd 
