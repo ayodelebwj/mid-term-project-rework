@@ -9,6 +9,7 @@
   tasks:
     - name: clone git repo
       git:
+        single_branch: true
         repo: https://github.com/techbleat/fruits-veg_market.git
         dest: /home/ubuntu/project/
         update: yes
