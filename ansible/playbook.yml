@@ -3,8 +3,65 @@
   hosts: web
   gather_facts: true
   become: true
-  roles:
-    - frontend
+  #roles:
+  #  - frontend
+
+  tasks:
+    - name: clone git repo
+      git:
+        name: nginx
+        state: present
+        update_cache: yes
+        repo: https://github.com/techbleat/fruits-veg_market.git
+        dest: /home/ubuntu/
+
+    - name: update index.html
+      replace:
+        path: /home/ubuntu/fruits-veg_market/frontend/index.html
+        regexp: 'http://[^"]+/api/products'
+        replace: '/api/products'
+
+    - name: copy nginx config file
+      template:
+        src: default.j2
+        dest: /etc/nginx/sites-available/default  
+
+    - name: install nginx
+      package:
+        name: nginx
+        state: present
+
+    - name: restart nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: check if nginx ubuntu file exists
+      ansible.builtin.stat:
+        path: /var/www/html/index.nginx.html
+      register: index_file
+
+    - name: Backup index.nginx.html manually
+      ansible.builtin.copy:
+        src: /home/ubuntu/fruits-veg_market/frontend/index.nginx.html
+        dest: /var/www/html/index.nginx
+        remote_src: yes
+
+    - name: copy index.html file
+      copy:
+        src: /home/ubuntu/fruits-veg_market/frontend/index.html
+        dest: /var/www/html/index.html
+
+    - name: restart nginx service
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes  
+
+
+
+
 
 
 #- hosts: backend
