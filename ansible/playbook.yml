@@ -9,9 +9,6 @@
   tasks:
     - name: clone git repo
       git:
-        name: nginx
-        state: present
-        update_cache: yes
         repo: https://github.com/techbleat/fruits-veg_market.git
         dest: /home/ubuntu/
 
