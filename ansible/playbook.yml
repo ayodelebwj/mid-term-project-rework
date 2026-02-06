@@ -65,7 +65,6 @@
         src: default.j2
         dest: /etc/nginx/sites-available/default
 
-
     - name: restart nginx service
       service:
         name: nginx
