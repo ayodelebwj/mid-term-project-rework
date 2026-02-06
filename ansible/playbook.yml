@@ -68,8 +68,6 @@
       command: sudo rm /etc/nginx/sites-available/default
       when: index_file.stat.exists
 
-
-
     - name: copy nginx config file
       template:
         src: default.j2
