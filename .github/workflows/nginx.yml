@@ -45,7 +45,7 @@ jobs:
       - name: Terraform Apply
         working-directory: terraform
         run: 
-          terraform apply -auto-approve
+          terraform destroy -auto-approve
 
       - name: Terraform output to json
         working-directory: terraform
