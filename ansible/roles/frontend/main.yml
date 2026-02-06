@@ -1,12 +1,4 @@
 ---
-- name: deploy nginx web app
-  hosts: web
-  become: yes
-  vars_files:
-    - frontend.yml
-
-
-  tasks:
     - name: clone git repo
       git:
         name: nginx
