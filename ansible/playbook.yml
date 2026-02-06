@@ -39,11 +39,7 @@
         state: started
         enabled: yes
 
-    - name: copy nginx config file
-      template:
-        src: default.j2
-        dest: /etc/nginx/sites-available/default  
-
+ 
     - name: check if nginx ubuntu file exists
       ansible.builtin.stat:
         path: /var/www/html/index.nginx-debian.html
