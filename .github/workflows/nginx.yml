@@ -52,21 +52,25 @@ jobs:
         run: terraform output -json > tf_output.json
 
       # -------------------------------
-      # Export Terraform Outputs
+      # Create inventory for Ansible
       # ----------------------------
-      - name: Export Terraform outputs
+      - name: Export Terraform outputs and build Ansible inventory
         working-directory: terraform
         run: |
-          echo "FRONTEND_IP=$(terraform output -raw frontend_ip)" >> $GITHUB_ENV
-          echo "BACKEND_IP=$(terraform output -raw backend_ip)" >> $GITHUB_ENV
+          FRONTEND_IP=$(terraform output -raw frontend_ip)
+          BACKEND_IP=$(terraform output -raw backend_ip)
 
-          cat <<EOF > ../ansible/inventory/hosts.ini
-          [app]
+          echo "FRONTEND_IP=$FRONTEND_IP" >> $GITHUB_ENV
+          echo "BACKEND_IP=$BACKEND_IP" >> $GITHUB_ENV
+
+          cat > ../ansible/inventory/hosts.ini <<EOF
+          [web]
           $FRONTEND_IP
 
-          [web]
+          [app]
           $BACKEND_IP
           EOF
+
 
       # ----------------------------
       # Install Python 
