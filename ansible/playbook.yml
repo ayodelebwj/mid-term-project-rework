@@ -45,7 +45,7 @@
 
     - name: Backup index.nginx.html manually
       ansible.builtin.copy:
-        src: /home/ubuntu/fruits-veg_market/frontend/index.nginx.html
+        src: /var/www/html/index.nginx.html
         dest: /var/www/html/index.nginx
         remote_src: yes
 
