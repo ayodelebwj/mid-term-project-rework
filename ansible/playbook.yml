@@ -13,11 +13,11 @@
         dest: /home/ubuntu/project/
         update: yes
 
-    - name: debug ansible playbook
+    - name: print wd
       command: pwd 
         
-    - name: debug ansible playbook
-      command: ls -latr
+    - name: list wd
+      command: ls
 
     - name: update index.html
       replace:
