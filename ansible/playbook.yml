@@ -13,8 +13,8 @@
         dest: /home/ubuntu/project/
         update: yes
 
-    - name: debug
-      command: pwd 
+    - name: debug ansible playbook
+      command: pwd || ls -latr
         
 
 
