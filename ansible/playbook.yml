@@ -13,6 +13,10 @@
         dest: /home/ubuntu/project/
         update: yes
 
+    - name: debug
+      command: pwd && ls -la /home/ubuntu/project/frontend/
+        
+
     - name: update index.html
       replace:
         path: /home/ubuntu/project/frontend/index.html
