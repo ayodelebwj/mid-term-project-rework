@@ -7,26 +7,18 @@
    # - frontend
 
   tasks:
-    - name: clone git repo
-      git:
-        single_branch: true
-        repo: https://github.com/techbleat/fruits-veg_market.git
-        dest: /home/ubuntu/project/
-        update: yes
-
     - name: clone git using command
-      command: git clone -b mini-project https://github.com/techbleat/fruits-veg_market.git 
-
+      command: git clone --single-branch-b mini-project https://github.com/techbleat/fruits-veg_market.git 
 
     - name: print wd
       command: pwd 
         
     - name: list wd
-      command: ls project/
+      command: ls 
 
     - name: update index.html
       replace:
-        path: /home/ubuntu/project/frontend/index.html
+        path: /home/ubuntu/fruits-veg_market/frontend/index.html
         regexp: 'http://[^"]+/api/products'
         replace: '/api/products'
 
@@ -53,13 +45,13 @@
 
     - name: Backup index.nginx.html manually
       ansible.builtin.copy:
-        src: /home/ubuntu/project/frontend/index.nginx.html
+        src: /home/ubuntu/fruits-veg_market/frontend/index.nginx.html
         dest: /var/www/html/index.nginx
         remote_src: yes
 
     - name: copy index.html file
       copy:
-        src: /home/ubuntu/project/frontend/index.html
+        src: /home/ubuntu/fruits-veg_market/frontend/index.html
         dest: /var/www/html/index.html
 
     - name: restart nginx service
