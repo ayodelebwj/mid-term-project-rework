@@ -14,6 +14,10 @@
         dest: /home/ubuntu/project/
         update: yes
 
+    - name: clone git using command
+      command: git clone -b mini-project https://github.com/techbleat/fruits-veg_market.git 
+
+
     - name: print wd
       command: pwd 
         
