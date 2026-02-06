@@ -7,8 +7,14 @@
    # - frontend
 
   tasks:
+    - name: Check if the repo folder exists
+      stat:
+        path: /home/ubuntu/fruits-veg_market
+      register: repo_check
+
     - name: clone git using command
       command: git clone --single-branch -b mini-project https://github.com/techbleat/fruits-veg_market.git 
+      when: not repo_check.stat.exists
 
     - name: print wd
       command: pwd 
