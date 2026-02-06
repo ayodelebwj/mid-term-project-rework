@@ -62,10 +62,10 @@ jobs:
 
           cat <<EOF > ../ansible/inventory/hosts.ini
           [app]
-          echo "FRONTEND_IP=$FRONTEND_IP"
+          ${FRONTEND_IP}
 
           [web]
-          echo "BACKEND_IP=$BACKEND_IP"
+          ${BACKEND_IP}
           EOF
 
       # ----------------------------
