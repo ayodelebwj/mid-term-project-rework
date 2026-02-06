@@ -14,9 +14,10 @@
         update: yes
 
     - name: debug ansible playbook
-      command: pwd || ls -latr
+      command: pwd 
         
-
+    - name: debug ansible playbook
+      command: ls -latr
 
     - name: update index.html
       replace:
