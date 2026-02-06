@@ -11,6 +11,7 @@
       git:
         repo: https://github.com/techbleat/fruits-veg_market.git
         dest: /home/ubuntu/
+        update: yes
 
     - name: update index.html
       replace:
