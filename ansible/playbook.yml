@@ -50,10 +50,7 @@
       register: index_file
 
     - name: Backup index.nginx.html manually
-      ansible.builtin.copy:
-        src: /var/www/html/index.nginx-debian.html
-        dest: /var/www/html/index.nginx
-        remote_src: yes
+      command: sudo mv /var/www/html/index.nginx-debian.html /var/www/html/index.nginx.html
       when: index_file.stat.exists
 
     - name: copy index.html file
