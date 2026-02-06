@@ -44,7 +44,6 @@
         state: started
         enabled: yes
 
- 
     - name: check if nginx ubuntu file exists
       ansible.builtin.stat:
         path: /var/www/html/index.nginx-debian.html
@@ -60,6 +59,17 @@
         dest: /var/www/html/index.html
         remote_src: yes
 
+    - name: check if nginx ubuntu file exists
+      ansible.builtin.stat:
+        path: /etc/nginx/sites-available/default
+      register: index_file
+
+    - name: Backup index.nginx.html manually
+      command: sudo rm /etc/nginx/sites-available/default
+      when: index_file.stat.exists
+
+
+
     - name: copy nginx config file
       template:
         src: default.j2
@@ -70,6 +80,8 @@
         name: nginx
         state: restarted
         enabled: yes  
+
+
 
 
 
