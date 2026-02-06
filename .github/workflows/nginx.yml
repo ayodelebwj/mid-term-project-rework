@@ -71,6 +71,9 @@ jobs:
 
           [app]
           $BACKEND_IP
+
+          [web:vars]
+          app-server-IP=$FRONTEND_IP
           EOF
 
 
