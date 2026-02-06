@@ -17,7 +17,7 @@
       command: pwd 
         
     - name: list wd
-      command: ls
+      command: ls project/
 
     - name: update index.html
       replace:
