@@ -59,13 +59,15 @@ jobs:
         run: |
           FRONTEND_IP=$(terraform output -raw frontend_ip)
           BACKEND_IP=$(terraform output -raw backend_ip)
+          FRONTEND_PUBLIC_IP=$(terraform output -raw frontend_public_ip)
 
           echo "FRONTEND_IP=$FRONTEND_IP" >> $GITHUB_ENV
           echo "BACKEND_IP=$BACKEND_IP" >> $GITHUB_ENV
+          echo "FRONTEND_PUBLIC_IP=$FRONTEND_PUBLIC_IP" >> $GITHUB_ENV
 
           cat > ../ansible/inventory/hosts.ini <<EOF
           [web]
-          $FRONTEND_IP
+          $FRONTEND_PUBLIC_IP
 
           [app]
           $BACKEND_IP
