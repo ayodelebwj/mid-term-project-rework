@@ -31,6 +31,11 @@
     - name: install nginx
       package:
         name: nginx
+        state: absent
+
+    - name: install nginx
+      package:
+        name: nginx
         state: present
 
     - name: restart nginx
