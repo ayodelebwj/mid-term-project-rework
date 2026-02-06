@@ -80,9 +80,9 @@ jobs:
         with:
           python-version: '3.11'
 
-      # ----------------------------
+      # -----------------------------
       # Create SSH key for Ansible
-      # ----------------------------
+      # -----------------------------
       - name: Setup SSH key
         run: |
           echo "${{ secrets.AWS_SSH_KEY }}" > /tmp/mykey.pem
