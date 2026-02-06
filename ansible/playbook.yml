@@ -16,8 +16,7 @@
     - name: debug
       command: pwd 
         
-    - name: debug
-      command: ls -latr /home/ubuntu/project/frontend/
+
 
     - name: update index.html
       replace:
